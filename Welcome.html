@@ -1,9 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #e6f2ff; /* 淡蓝色背景 */
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background-color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e88e5;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: #1e88e5;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #ffeb3b;
+        }
+        
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+        
+        .dropdown-content a {
+            color: #1e88e5;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f8ff;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        /* 主体内容样式 */
+        .content-wrapper {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* 内容区域样式 */
+        .section {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1e88e5;
+            font-size: 32px;
+        }
+        
+        /* 首页样式 */
+        .homepage-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .photo-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .photo-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        /* 个人中心页面样式 */
+        .profile-container {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .profile-sidebar {
+            width: 25%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-sidebar ul {
+            list-style: none;
+        }
+        
+        .profile-sidebar li {
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+        
+        .profile-sidebar li:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-sidebar a {
+            color: #1e88e5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .profile-sidebar a:hover {
+            color: #ffeb3b;
+        }
+        
+        .profile-content {
+            width: 75%;
+        }
+        
+        .blog-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .blog-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .blog-card-content {
+            padding: 20px;
+        }
+        
+        .blog-card h3 {
+            margin-bottom: 10px;
+            color: #1e88e5;
+        }
+        
+        .blog-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #ff5722;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .read-more:hover {
+            background-color: #e64a19;
+        }
+        
+        /* 作品展示页面样式 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .portfolio-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .portfolio-info {
+            padding: 20px;
+        }
+        
+        .portfolio-info h3 {
+            margin-bottom: 10px;
+            color: #1e88e5;
+        }
+        
+        .portfolio-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .view-project {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .view-project:hover {
+            background-color: #388e3c;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: white;
+            color: #333;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: #1e88e5;
+            margin: 0 10px;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: #ffeb3b;
+        }
+        
+        /* 页面切换效果 */
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-<html>
-	<head>
-		<title>我的第一个网页</title>
-	</head>
-	<body>
-		hello,这是我的第一个网页
-	</body>
+        /* 粒子效果 */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">我的个人空间</div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-target="home">首页</a></li>
+                <li><a href="#" class="nav-link" data-target="profile">个人中心</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link" data-target="portfolio">作品展示</a>
+                    <div class="dropdown-content">
+                        <a href="html-works.html" target="_blank">HTML</a>
+                        <a href="css-works.html" target="_blank">CSS</a>
+                        <a href="js-works.html" target="_blank">JavaScript</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="particles-container" id="particles-container"></div>
+
+    <div class="content-wrapper">
+        <!-- 首页内容 -->
+        <section id="home" class="section active">
+            <div class="container">
+                <h2 class="section-title">欢迎来到我的个人空间</h2>
+                <div class="homepage-gallery">
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片1">
+                    </div>
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片2">
+                    </div>
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片3">
+                    </div>
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片4">
+                    </div>
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片4">
+                    </div>
+                    <div class="photo-card">
+                        <img src="img/Q版合影绘画.png" alt="个人照片4">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 个人中心页面 -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h2 class="section-title">个人中心</h2>
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <ul>
+                            <li><a href="#" class="sidebar-link active" data-target="info">个人信息</a></li>
+                            <li><a href="#" class="sidebar-link" data-target="blog">个人博客</a></li>
+                            <li><a href="#" class="sidebar-link" data-target="resume">我的简历</a></li>
+                            <li><a href="#" class="sidebar-link" data-target="contact">联系我</a></li>
+                        </ul>
+                    </div>
+                    <div class="profile-content">
+                        <div class="content-info active" id="info-content">
+                            <h3>关于我</h3>
+                            <p>你好！我是一名热爱前端开发的程序员，热衷于创建用户友好、美观的网站设计。</p>
+                            <p>在空闲时间，我喜欢探索新技术，阅读编程书籍，以及参加各种技术论坛和社区活动。</p>
+                            <p>我的目标是不断学习和成长，为高质量的开发服务。</p>
+                        </div>
+                        <div class="content-info" id="blog-content" style="display: none;">
+                            <h3>我的博客</h3>
+                            <div class="blog-preview">
+                                <div class="blog-card">
+                                    <img src="img/image0.png" alt="博客1">
+                                    <div class="blog-card-content">
+                                        <h3>HTML5新特性详解</h3>
+                                        <p>探索HTML5带来的新元素和改进，以及如何在实际项目中应用这些新技术。</p>
+                                        <a href="https://blog.csdn.net/Betty_May/article/details/145036811?spm=1001.2014.3001.5501"  class="read-more" target="_blank">阅读更多</a>
+                                    </div>
+                                </div>
+                                <div class="blog-card">
+                                    <img src="img/image1.png" alt="博客2">
+                                    <div class="blog-card-content">
+                                        <h3>CSS Grid布局完全指南</h3>
+                                        <p>深入学习CSS Grid的高级技巧，掌握现代网页布局的核心方法。</p>
+                                        <a href="https://blog.csdn.net/Betty_May/article/details/145062491?spm=1001.2014.3001.5501" class="read-more" target="_blank">阅读更多</a>
+                                    </div>
+                                </div>
+                                <div class="blog-card">
+                                    <img src="img/image0.png" alt="博客3">
+                                    <div class="blog-card-content">
+                                        <h3>JavaScript搭建音乐播放器</h3>
+                                        <p>了解如何使用JavaScript开发一个音乐播放器，并实现基本的播放功能。</p>
+                                        <a href="https://blog.csdn.net/Betty_May/article/details/148383118?spm=1001.2014.3001.5501" class="read-more">阅读更多</a>
+                                        
+                                    </div>
+                                </div>
+                                <div class="blog-card">
+                                    <img src="img/image0.png" alt="博客3">
+                                    <div class="blog-card-content">
+                                        <h3>轮播图制作</h3>
+                                        <p>了解如何通过JavaScript制作轮播图，提升用户体验。</p>
+                                        <a href="https://blog.csdn.net/Betty_May/article/details/148062952?spm=1001.2014.3001.5501" class="read-more">阅读更多</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-info" id="resume-content" style="display: none;">
+                            <h3>我的简历</h3>
+                            <p>在这里可以查看我的完整简历和工作经历...</p>
+                        </div>
+                        <div class="content-info" id="contact-content" style="display: none;">
+                            <h3>联系我</h3>
+                            <p>邮箱: 964187596@qq.com</p>
+                            <p>电话: 13336445248</p>
+                            <p>社交媒体: <a href="#">Twitter</a>, <a href="#">LinkedIn</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 作品展示页面 -->
+        <section id="portfolio" class="section">
+            <div class="container">
+                <h2 class="section-title">作品展示</h2>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <img src="img/小米电商.png" alt="项目1">
+                        <div class="portfolio-info">
+                            <h3>电商网站</h3>
+                            <p>基于HTML5和CSS3构建的响应式电子商务平台，支持多设备访问。</p>
+                            <a href="小米官网项目/index.html" class="view-project" target="_blank">查看项目</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="img/记事本.png" alt="项目2">
+                        <div class="portfolio-info">
+                            <h3>记事本应用</h3>
+                            <p>使用JavaScript开发的在线记事本，支持数据本地存储和云同步。</p>
+                            <a href="todo-master copy/index.html" class="view-project" target="_blank">查看项目</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="img/音乐播放器.png" alt="项目3">
+                        <div class="portfolio-info">
+                            <h3>音乐播放器界面</h3>
+                            <p>模仿音乐平台开发音乐播放器。</p>
+                            <a href="musicPlayer-main/index.html" class="view-project" target="_blank">查看项目</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="img/接小球.png" alt="项目4">
+                        <div class="portfolio-info">
+                            <h3>网页游戏</h3>
+                            <p>基于JavaScript开发的简单网页游戏，具有挑战性和趣味性。</p>
+                            <a href="接小球游戏html-css-js/index.html" class="view-project" target="_blank">查看项目</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="img/image0.png" alt="项目5">
+                        <div class="portfolio-info">
+                            <h3>UI设计作品集</h3>
+                            <p>展示我最近完成的UI/UX设计项目，包含移动端和桌面端设计。</p>
+                            <a href="#" class="view-project">查看项目</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="img/image0.png" alt="项目6">
+                        <div class="portfolio-info">
+                            <h3>RESTful API开发</h3>
+                            <p>使用Node.js和Express开发的RESTful API服务，支持多种数据库。</p>
+                            <a href="#" class="view-project">查看项目</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 我的个人网站. 保留所有权利.</p>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">GitHub</a>
+            </div>
+            <p>联系我: 964187596@qq.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // 导航链接切换页面
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有导航链接的active类
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // 为当前点击的链接添加active类
+                this.classList.add('active');
+                
+                // 隐藏所有页面
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 显示目标页面
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+        
+        // 个人中心侧边栏链接切换
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有侧边栏链接的active类
+                document.querySelectorAll('.sidebar-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // 为当前点击的链接添加active类
+                this.classList.add('active');
+                
+                // 隐藏所有内容
+                const contentAreas = [
+                    document.getElementById('info-content'),
+                    document.getElementById('blog-content'),
+                    document.getElementById('resume-content'),
+                    document.getElementById('contact-content')
+                ];
+                
+                contentAreas.forEach(area => {
+                    if (area) {
+                        area.style.display = 'none';
+                    }
+                });
+                
+                // 显示目标内容
+                const target = this.getAttribute('data-target');
+                const targetContent = document.getElementById(`${target}-content`);
+                if (targetContent) {
+                    targetContent.style.display = 'block';
+                }
+            });
+        });
+        
+        // 页面滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '15px 0';
+                navbar.style.transform = 'translateY(0)';
+                navbar.style.transition = 'all 0.3s ease';
+            } else {
+                navbar.style.padding = '20px 0';
+            }
+        });
+        
+        // 初始化页面，显示首页
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('home').classList.add('active');
+            document.querySelector('.nav-link[data-target="home"]').classList.add('active');
+            
+            // 初始化粒子效果
+            initParticles();
+        });
+
+        // 粒子效果
+        let particles = [];
+        const particleCount = 300; // 进一步增加粒子数量
+        const container = document.getElementById('particles-container');
+        let mouseX = 0, mouseY = 0;
+
+        function initParticles() {
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+
+            // 监听鼠标移动
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // 动画循环
+            requestAnimationFrame(animateParticles);
+        }
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // 随机颜色
+            const colors = ['#ffffff', '#9c27b0', '#ffeb3b'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.backgroundColor = randomColor;
+            
+            // 随机大小 (保持粒子较小)
+            const size = Math.random() * 4 + 1; // 调整粒子大小范围为1-5px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // 随机位置
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // 添加到容器
+            container.appendChild(particle);
+            
+            // 存储粒子信息
+            particles.push({
+                element: particle,
+                x: parseFloat(particle.style.left),
+                y: parseFloat(particle.style.top),
+                originalX: parseFloat(particle.style.left),
+                originalY: parseFloat(particle.style.top),
+                speedX: Math.random() * 0.5 - 0.25,
+                speedY: Math.random() * 0.5 - 0.25,
+                color: randomColor,
+                size: size
+            });
+        }
+
+        function animateParticles() {
+            particles.forEach(particle => {
+                // 计算粒子与鼠标之间的距离
+                const dx = mouseX - (particle.x * window.innerWidth / 100);
+                const dy = mouseY - (particle.y * window.innerHeight / 100);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // 如果鼠标靠近粒子，粒子向鼠标方向移动
+                if (distance < 100) {
+                    const force = 0.1 * (1 - distance / 100);
+                    particle.x += force * dx * 0.1;
+                    particle.y += force * dy * 0.1;
+                } else {
+                    // 否则粒子缓慢回归原始位置
+                    particle.x += (particle.originalX - particle.x) * 0.01;
+                    particle.y += (particle.originalY - particle.y) * 0.01;
+                }
+                
+                // 应用速度
+                particle.x += particle.speedX * 0.5; // 减慢粒子速度
+                particle.y += particle.speedY * 0.5; // 减慢粒子速度
+                
+                // 边界检查
+                if (particle.x < 0) particle.x = 0;
+                if (particle.x > 100) particle.x = 100;
+                if (particle.y < 0) particle.y = 0;
+                if (particle.y > 100) particle.y = 100;
+                
+                // 更新样式
+                particle.element.style.left = `${particle.x}%`;
+                particle.element.style.top = `${particle.y}%`;
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+    </script>
+</body>
 </html>
